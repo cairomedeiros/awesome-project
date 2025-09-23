@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, HTTPException
 from pydantic import BaseModel
 from typing import Annotated
 
@@ -37,7 +37,7 @@ def update_todos(todo_id: int = Path(title="given id"), updated_todo: Todo = Pat
         if todo.id == todo_id:
             todos[index] = updated_todo
             return {"message": "updated", "todo": updated_todo}
-    return {"message": "todo item not found", "todo id": todo_id}
+    raise HTTPException(detail="todo item not found", status_code=404)
 
 @app.delete("/todos/{todo_id}")
 def update_todos(todo_id: int):
