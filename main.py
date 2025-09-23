@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
 from pydantic import BaseModel
+from typing import Annotated
 
 app = FastAPI()
 
@@ -25,13 +26,13 @@ def get_todos():
     return {"message": "todo list", "todos": todos}
 
 @app.get("/todos/{todo_id}")
-def get_todos(todo_id: int):
+def get_todos(todo_id: Annotated[int, Path(title="given id")]):
     for todo in todos:
         if todo.id == todo_id:
             return {"message": "found", "todo": todo}
         
 @app.put("/todos/{todo_id}")
-def update_todos(todo_id: int, updated_todo: Todo):
+def update_todos(todo_id: int = Path(title="given id"), updated_todo: Todo = Path(title="todo")):
     for index, todo in enumerate(todos):
         if todo.id == todo_id:
             todos[index] = updated_todo
