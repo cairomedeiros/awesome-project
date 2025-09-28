@@ -1,11 +1,13 @@
 from fastapi import FastAPI, Path, HTTPException
 from pydantic import BaseModel
 from typing import Annotated
+from db.postgreSQL import DBConnection
 
 app = FastAPI()
 
 @app.get("/")
 async def root():
+    DBConnection.connection_test()
     return {"message": "Hello World"}
 
 class Todo(BaseModel):
